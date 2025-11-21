@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id = "app"></div>
+    <script src="vue.js"></script>
+    <script>
+
+    // {{}} 是插值语法，用于将 Vue 实例中的数据渲染到页面上。
+    // 具体来说，它的作用是把 Vue 实例中data选项里定义的变量（比如这里的message）的值，
+    // 插入到对应的 HTML 模板中。例如，如果 Vue 实例的data中有message: 'Hello Vue'，
+    // 那么{{message}}就会被替换成Hello Vue，最终在页面上显示这个内容。
+      let vm = new Vue({
+            el:"#app",//el是element的意思，表示容器的DOM元素，值是一个选择器
+            //template 模板和数据结合 然后放到div里面
+            //会把div那一行给replace掉
+            //小户语法
+            template:'<span>{{message}}</span>',
+                data:{
+                    message:'hello'
+                }
+        });
+        
+    </script>
+</body>
+</html>
