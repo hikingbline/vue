@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue</title>
+</head>
+<body>
+    <!-- 此时不需要编译模板的过程了 -->
+    <div id="app">
+        <input v-on:input="print"/>
+    </div>
+    <script src = "my-vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el:'#app',
+            data:{msg:'hello'},
+            methods: {
+                //定义此Vue实例的方法
+                print(event){
+                    console.log(event.target.value);
+                }
+            }
+        });
+        // vm.say();
+    </script>
+</body>
+</html>

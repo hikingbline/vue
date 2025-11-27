@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src = "my-vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el:'#app',
+            data:{msg:'hello',content:'world'},
+            template:'<p><span v-text = "msg"></span><span v-text = "content"></span></p>'
+        });
+        console.log(vm);
+
+        setTimeout(()=>{
+            //当我们修改模型值的时候，界面应该要更新
+            vm.msg = 'world';
+        },1000);
+        
+    </script>
+</body>
+</html>

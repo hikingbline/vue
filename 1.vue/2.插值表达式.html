@@ -3,10 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>1.vue</title>
+    <title>2.插值表达式</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <!-- 你第一次访问 messages.reverse() 时，数组被反转了
+      但 Vue 的响应式系统可能会多次求值这个表达式
+      第二次求值时，数组又被反转回来，最终看起来好像没有反转 -->
+
+      <!-- 使用非破坏性方法：创建原数组的副本再操作，如使用扩展运算符 [...arr] 或 slice() 方法 -->
+      <span>{{ [...messages].reverse().map(item => item.toUpperCase()).join(',')}}</span>
+    </div>
     <script src="vue.js"></script>
     <script>
       // {{}} 是插值语法，用于将 Vue 实例中的数据渲染到页面上。
@@ -17,10 +24,10 @@
         el: "#app", //el是element的意思，表示容器的DOM元素，值是一个选择器
         //template 模板和数据结合 然后放到div里面
         //会把div那一行给replace掉
-        //小户语法
-        template: "<span>{{message}}</span>",
+        //template: "<span>{{message}}</span>",
         data: {
           message: "hello",
+          messages: ["a", "b", "c", "l", "ddd", "lsr"],
         },
       });
       console.log(vm);

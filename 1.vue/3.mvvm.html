@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3.mvvm</title>
+  </head>
+  <body>
+    <div id="app">
+      <input v-model = "msg"/>
+      <!-- <span>{{ [...messages].reverse().map(item => item.toUpperCase()).join(',')}}</span> -->
+    </div>
+    <script src="vue.js"></script>
+    <script>
+      let vm = new Vue({
+        el: "#app", 
+        data: {
+          msg:'hello',
+          message: "hello",
+          messages: ["a", "b", "c", "l", "ddd", "lsr"],
+        },
+      });
+      console.log(vm);
+      console.log(vm.$data.message);
+      setTimeout(() => {
+        vm.$data.message = "world";
+        console.log(vm.$data.message);
+      }, 3000);
+    </script>
+  </body>
+</html>

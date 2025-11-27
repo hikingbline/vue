@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 定义视图，就是用户与其交互的界面的元素 -->
+    <p id="counter-text">计数：0</p>
+    <button id="add-btn">增加</button>
+    <script>
+        //定义数据模型（mode)和视图模型（ViewModel)
+        const model ={
+            count:0
+        }
+        //视图模型 （ViewModel)Vue
+        //把模型和视图进行了一个关联
+        const viewModel = {
+            addCounter(){
+                //更新模型
+                model.count++;
+                //更新视图
+                this.upadateView();
+            },
+            upadateView(){
+                document.getElementById('counter-text').innerText = `计数：${model.count}`;
+            }
+
+
+        }
+        document.getElementById('add-btn').addEventListener('click',()=>{
+            viewModel.addCounter();
+        });
+        //viewModel的核心是实现了model和View的解耦合  每个部分只负责自己的职责就可以了
+        //而View可以实现在一个桥梁的作用下，关联Model和View
+
+    </script>
+</body>
+</html>
