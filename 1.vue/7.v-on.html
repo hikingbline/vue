@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app" v-cloak>
+      <button @click="sayHello">点击</button>
+    </div>
+      
+    <script src = "my-vue.js"></script>
+    <script>
+       const vm =  new Vue({
+            el: '#app',
+            data: {
+               title:'标题'
+            },
+            methods:{
+                sayHello(){
+                    console.log('hello',this.title);
+                }
+            }
+        });
+        //vm.msg = 'world'; // 修改数据，视图会更新
+    </script>
+    
+</body>
+</html>

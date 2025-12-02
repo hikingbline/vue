@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue</title>
+</head>
+<body>
+    <!-- 此时不需要编译模板的过程了 -->
+    <div id="app">
+        <div id="parent" v-on:click = "parentClick">
+            parent
+            <!-- 时间修饰符 .stop停止冒泡 -->
+            <div id="child" v-on:click.stop = "childClick">
+                child
+        </div> 
+     </div>
+    <script src = "vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el:'#app',
+            data:{msg:'hello'},
+            methods: {
+                //定义此Vue实例的方法
+                parentClick(){
+                    console.log('parent click');
+                },
+                childClick(event){
+                    // event.stopPropagation();
+                    console.log('child click');
+                }
+            }
+        });
+        // vm.say();
+    </script>
+</body>
+</html>

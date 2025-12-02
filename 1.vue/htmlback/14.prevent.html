@@ -8,17 +8,26 @@
 <body>
     <!-- 此时不需要编译模板的过程了 -->
     <div id="app">
-        <input v-on:input="print"/>
-    </div>
-    <script src = "my-vue.js"></script>
+        <!-- 修饰符 .prevent阻止默认事件 -->
+        <from v-on:submit.prevent = "handleSubmit">
+            <label>用户名</label>
+            <input/>
+            <input tyepe = "submit"/>
+        </from>
+       
+        
+     </div>
+    <script src = "vue.js"></script>
     <script>
         let vm = new Vue({
             el:'#app',
             data:{msg:'hello'},
             methods: {
                 //定义此Vue实例的方法
-                print(event){
-                    console.log(event.target.value);
+                handleSubmit(event){
+                    //阻止默认事件
+                    event.preventDefault();
+                    console.log('handleSubmit');
                 }
             }
         });
