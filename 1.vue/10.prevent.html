@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <!-- 如果不加的话会出现每提交一次就刷新一次界面 -->
+        <form @submit.prevent = "handleSubmit">
+            <input/>
+            <input type = "submit"/>
+        </form>
+      </div>
+      
+    <script src = "my-vue.js"></script>
+    <script>
+       const vm =  new Vue({
+            el: '#app',
+            data: {
+               msg:'消息'
+            },
+            methods:{
+               handleSubmit(event){
+                 console.log("handlesubmit");
+                 
+               }
+            }
+        });
+        //vm.msg = 'world'; // 修改数据，视图会更新
+    </script>
+    
+</body>
+</html>

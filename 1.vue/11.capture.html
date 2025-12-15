@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <div 
+            @click = "parentBubbleClick"
+            @click.capture = "parentCaptureClick">
+            <button 
+                @click="childBubbleClick"
+                @click.capture = "childCaptureClick">点我</button>
+        </div>
+
+      </div>
+      
+    <script src = "my-vue.js"></script> 
+    <script>
+       const vm =  new Vue({
+            el: '#app',
+            data: {
+               msg:'消息'
+            },
+            methods:{
+                parentBubbleClick(){
+                    console.log('parentBubbleClick');
+                },
+                parentCaptureClick(){
+                    console.log('parentCaptureClick');
+                },
+                childBubbleClick(){
+                    console.log('childBubbleClick');
+                },
+                childCaptureClick(){
+                    console.log('childCaptureClick');
+                }
+            }
+        });
+        //vm.msg = 'world'; // 修改数据，视图会更新
+    </script>
+    
+</body>
+</html>

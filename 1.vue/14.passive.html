@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .scroll-area{
+        width: 300px;
+        height: 200px;
+        /* 内容超过宽高的话会自动出现滚动条 */
+        overflow: auto;
+      }
+      .content{
+        height: 1000px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+     <div v-on:scroll.passive="onScroll" class ="scroll-area"></div>
+      <div class = "content">内容</div>
+    </div>
+
+    <script src="my-vue.js"></script>
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+        },
+        methods: {
+          onScroll(event){
+            //如果在绑定事件的时候添加了passive参数的话
+            //就会表示肯定不会在事件处理函数中阻止默认事件
+            //浏览器就不用判断了，可以大胆地进行性能优化了
+            //event.preventDefault();
+            console.log('onScroll');
+          }
+        },
+      });
+      //vm.msg = 'world'; // 修改数据，视图会更新
+    </script>
+  </body>
+</html>

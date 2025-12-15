@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <!-- 一个文本里面有多个变量 -->
+      <p>counter1:{{counter1}},counter2:{{counter2}}</p>
+      <button @click="add1">add1</button>
+      <p>counter2:{{counter2}}</p>
+      <button @click="add2">add2</button>
+      <p>counter3:{{counter3}}</p>
+      <button @click="add3">add3</button>
+    </div>
+
+    <script src="my-vue.js"></script>
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          //data的属性都是依赖项
+          counter1: 0,//每一个属性对应一个依赖的实例
+          counter2: 0,
+          counter3: 0,
+        },
+        methods: {
+          add1() {
+            this.counter1 = this.counter1 + 1;
+          },
+          add2() {
+            this.counter2 = this.counter2 + 1;
+          },
+          add3() {
+            this.counter3 = this.counter3 + 1;
+          },
+        },
+      });
+      //vm.msg = 'world'; // 修改数据，视图会更新
+    </script>
+  </body>
+</html>
