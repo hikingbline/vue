@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>回顾object.defineproperty</title>
+		<script type="text/javascript" src="../js/vue.js"></script>
+	</head>
+	<body>
+		<!--div里面的是视图View  -->
+		<div id="root">
+			
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		
+		//这个是ViewModel
+		//一般用vm来接收实例对象
+		let number = 18
+		let person = {
+			name:'天谕',
+			sex:'男',
+			age:number
+			//直接写是可以随意增删改查的
+		}
+
+		//三个参数 给哪个对象传属性 属性名 配置项
+		Object.defineProperty(person,'age',{
+			//四个基本的数据项
+			// value:18,
+			// enumerable:true, //控制属性是否可以被枚举,默认值是false
+			// writable:true, //控制属性是否可以被修改,默认值是false
+			// configurable:true //控制属性是否可以被删除,默认值是false
+
+		//当有人读取person的age属性时，会自动执行这个方法,且返回值就是age的值
+		get() {
+			console.log('有人读取age属性了')
+			return number
+		},
+        //当有人修改person的age属性时，会自动执行这个方法,且返回值就是age的值
+		set(value) {
+			console.log('有人修改了age属性，新值是',value)
+			number = value
+		}
+
+			
+		})//这个新加的属性是不可枚举的(不能遍历)
+		//console.log(Object.keys(person));
+		
+		for (let key in person) {
+			console.log(person[key]);
+		}
+
+		
+
+		console.log(person);
+		
+	</script>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>事件修饰符</title>
+		<script type="text/javascript" src="../js/vue.js"></script>
+		<style>
+			*{
+				margin-top: 20px;
+			}
+			.demo1{
+				height: 50px;
+				background-color: skyblue;
+			}
+			.box1{
+				padding: 5px;
+				background-color: skyblue;
+			}
+			.box2{
+				padding: 5px;
+				background-color: orange;
+			}
+			.list{
+				width: 200px;
+				height: 200px;
+				background-color: peru;
+				/* 加了一个滚动事件 */
+				overflow: auto;
+			}
+			li{
+				height: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<h2>欢迎来到{{name}}学习</h2>
+			<!-- 阻止默认事件（常用） -->
+			<a href="http://www.atguigu.com" @click.prevent="showInfo">点我提示信息</a>
+
+			<!-- 阻止事件冒泡（常用） -->
+			<div class="demo1" @click="showInfo">
+				<!-- 只会触发一次 -->
+				<button @click.stop="showInfo">点我提示信息</button>
+				<!-- 修饰符可以连续写 -->
+				<!-- 阻止默认事件和事件冒泡 -->
+				<!-- <a href="http://www.atguigu.com" @click.prevent.stop="showInfo">点我提示信息</a> -->
+			</div>
+
+			<!-- 事件只触发一次（常用） -->
+			<button @click.once="showInfo">点我提示信息</button>
+
+			<!-- 使用事件的捕获模式 -->
+			<!--JS里面的事件流分为捕获阶段和冒泡阶段  -->
+			<!-- 捕获阶段是从外到内 冒泡阶段是从内到外 -->
+			<!-- 添加.capture让它在捕获阶段就进行处理 -->
+			<div class="box1" @click.capture="showMsg(1)">
+				div1
+				<div class="box2" @click="showMsg(2)">
+					div2
+				</div>
+			</div>
+
+			<!-- 只有event.target是当前操作的元素时才触发事件； -->
+			<div class="demo1" @click.self="showInfo">
+				<button @click="showInfo">点我提示信息</button>
+			</div>
+
+			
+			 <!-- scoll 键盘上下滚动事件 -->
+			 <!-- 鼠标滚轮滚动事件 滚轮滚动事件默认行为是滚动页面，如果绑定的函数运行时间长，滚动会卡顿 -->
+			 <!-- 事件的默认行为立即执行，无需等待事件回调执行完毕； -->
+			<ul @wheel.passive="demo" class="list">
+				<li>1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+			</ul>
+
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+
+		new Vue({
+			el:'#root',
+			data:{
+				name:'尚硅谷'
+			},
+			methods:{
+				showInfo(e){
+					alert('同学你好！')
+					// console.log(e.target)
+				},
+				showMsg(msg){
+					console.log(msg)
+				},
+				demo(){
+					for (let i = 0; i < 100000; i++) {
+						console.log('#')
+					}
+					console.log('累坏了')
+				}
+			}
+		})
+	</script>
+</html>

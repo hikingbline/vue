@@ -9,10 +9,15 @@
   <body>
     <div id="app">
       <!-- 写一个输入框 -->
-      <input v-model="msg" />
+       <p>{{msg}}</p>
+       <span v-text = "msg"></span>
+       <div v-html="msg"> </div>
+       <h1 :id = "msg">h1</h1>  
+       <!-- v-bind缩写 -->
+       <input v-model="msg" />
     </div>
 
-    <script src="vue.js"></script>
+    <script src="my-vue.js"></script>
     <script>
       const vm = new Vue({
         el: "#app",

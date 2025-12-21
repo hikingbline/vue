@@ -135,3 +135,4 @@ export default {
 }
 </script>
 在这个例子中，<input> 元素与 message 数据属性双向绑定。也就是说，当用户在输入框中输入文本时，message 数据属性会自动更新；反过来，如果 message 数据属性变化，输入框中的内容也会跟着变。
+

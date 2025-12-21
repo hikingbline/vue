@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>姓名案例_计算属性实现</title>
+		<!-- 引入Vue -->
+		<script type="text/javascript" src="../js/vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			姓：<input type="text" v-model="firstName"> <br/><br/>
+			名：<input type="text" v-model="lastName"> <br/><br/>
+			测试：<input type="text" v-model="x"> <br/><br/>
+			<!-- 在这个时候fullName是一个属性，而不是一个方法 -->
+			<!-- 计算属性最终会出现在vm上，直接读取使用即可。 -->
+			全名：<span>{{fullName}}</span> <br/><br/>
+			<!-- 全名：<span>{{fullName}}</span> <br/><br/>
+			全名：<span>{{fullName}}</span> <br/><br/>
+			全名：<span>{{fullName}}</span> -->
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+
+		const vm = new Vue({
+			el:'#root',
+			//在Vue里面，属性和计算属性是分开放的
+			data:{
+				firstName:'张',
+				lastName:'三',
+				x:'你好'
+			},
+			computed:{
+				//fullName会自动调用
+				fullName:{
+					// 当有人读取fullName时，get就会被调用，且返回值就作为fullName的值
+					//get调用时机：1.初次读取fullName值的时候 2.所依赖的数据发生变化的时候
+					get(){
+						console.log('get被调用了')
+						console.log(this) //此处的this是vm
+						return this.firstName + '-' + this.lastName
+					},
+					
+					set(value){
+						console.log('set',value)
+						const arr = value.split('-')
+						this.firstName = arr[0]
+						this.lastName = arr[1]
+					}
+				}
+			}
+		})
+	</script>
+</html>

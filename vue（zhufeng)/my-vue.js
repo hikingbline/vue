@@ -9,6 +9,7 @@ const KeyMap = {
   right: "ArrowRight",
   space: "Space",
 };
+
 //dependency 的意思，也就是被观察者 data对象的每个属性都对应一个Dep实例
 //代表一个依赖 代表一个被观察的变量
 class Dep {
@@ -132,7 +133,7 @@ class Vue {
     }
   }
 
-  compile(el) {
+  compile(el, isOnce = false) {
     //声明式渲染  vm = this
     const vm = this;
     const { childNodes } = el;
@@ -143,10 +144,15 @@ class Vue {
         return;
       }
       if (node.nodeType === ELEMENT_NODE) {
+        isOnce = isOnce || node.hasAttribute("v-once");
         //编译此元素节点的属性
-        compileAttributes([...node.attributes], node, vm);
+        compileAttributes([...node.attributes], node, vm, isOnce);
         //编译此子元素节点
-        vm.compile(node);
+        //如果此节点有v-once属性的话，那么此节点下面所有的地方都不再添加Watcher
+        // 【修改】统一传递isOnce，确保子节点继承v-once标记
+        vm.compile(node, isOnce);
+        // 【新增】移除v-once属性（清理冗余，不影响功能）
+        node.removeAttribute("v-once");
         //如果节点是第一个文本子节点的话
       } else if (node.nodeType === TEXT_NODE) {
         //先尝试去获取此文本节点上的originalTextContent原始的文本内容
@@ -167,18 +173,20 @@ class Vue {
           });
         };
         updateTextContent();
-        //进行依赖收集，创建观察者，观察counter1这个变量，以后当变量更新的时候，会通知此处进行更新，执行DOM
-        let match;
-        //依次匹配原始文本中所有的插值语法（{{变量名}}）
-        // reg.exec()：每次执行返回一个匹配数组，无匹配时返回null，循环终止
-        while ((match = reg.exec(originalTextContent)) !== null) {
-          // 4. 提取插值中的变量名（去除首尾空格）
-          // match[0]：完整匹配的字符串（如"{{counter1}}"）
-          // match[1]：正则捕获组的内容（如"counter1"，对应{{}}包裹的部分）
-          const key = match[1].trim();
-          //为模板里面的每一个变量(也就是依赖)增加一个观察者的实例，负责监听此变量的变更
-          //如果此变量更新了，则会执行回调函数，更新真实DOM
-          new Watcher(vm, key, updateTextContent);
+        //如果不是只渲染一次就添加监听
+        if (!isOnce) {
+          let match;
+          //依次匹配原始文本中所有的插值语法（{{变量名}}）
+          // reg.exec()：每次执行返回一个匹配数组，无匹配时返回null，循环终止
+          while ((match = reg.exec(originalTextContent)) !== null) {
+            // 4. 提取插值中的变量名（去除首尾空格）
+            // match[0]：完整匹配的字符串（如"{{counter1}}"）
+            // match[1]：正则捕获组的内容（如"counter1"，对应{{}}包裹的部分）
+            const key = match[1].trim();
+            //为模板里面的每一个变量(也就是依赖)增加一个观察者的实例，负责监听此变量的变更
+            //如果此变量更新了，则会执行回调函数，更新真实DOM
+            new Watcher(vm, key, updateTextContent);
+          }
         }
       }
     });
@@ -188,68 +196,104 @@ class Vue {
 }
 
 //编译属性 识别指令进行处理
-function compileAttributes(attributes, node, vm) {
+function compileAttributes(attributes, node, vm, isOnce) {
   attributes.forEach((attr) => {
     if (attr.name === "v-text") {
-      handleVText(node, attr, vm); //node节点 attr属性 vm实例
+      handleVText(node, attr, vm, isOnce); //node节点 attr属性 vm实例
     } else if (attr.name === "v-html") {
-      handleVHtml(node, attr, vm); //node节点 attr属性 vm实例
+      handleVHtml(node, attr, vm, isOnce); //node节点 attr属性 vm实例
     }
     //属性名以v-bind:开头的话
-      else if (attr.name.startsWith("v-bind:") || attr.name.startsWith(":")) {
-      handleVBind(node, attr, vm);
+    else if (attr.name.startsWith("v-bind:") || attr.name.startsWith(":")) {
+      handleVBind(node, attr, vm, isOnce);
     } else if (attr.name.startsWith("v-on:") || attr.name.startsWith("@")) {
       handleEvent(node, attr, vm);
     } else if (attr.name === "v-model") {
-      handleVModel(node, attr, vm);
-      
+      handleVModel(node, attr, vm, isOnce);
+    } else if (attr.name === "v-show") {
+      handleVShow(node, attr, vm, isOnce);
     }
   });
 }
+function handleVShow(node, attr, vm, isOnce) {
+  //key 属性 expr表达式
+  //到现在为止 我们使用的都是data对象的属性
+  const expr = attr.value;
+  //定义方法
+  const update = () => {
+    node.style.display = vm[expr] ? "block" : "none";
+  };
+  //更新DOM节点的display属性
+  update();
+  if (!isOnce) {
+    //创建一个watcher 当 vm 的属性expr发生变化，则执行update方法
+    new Watcher(vm, expr, update);
+  }
+}
 
-//处理v-model指令 让输入框和data对象的属性进行双向绑定
-//node 当前的DOM节点 就是那个input输入框
-//attr {v-model:'msg'}
+//双向绑定 节点更新内容了改模型 模型更新内容了改节点
+//处理v-model指令  让输入框和data对象的属性进行双向绑定
+//node            当前的DOM节点 就是那个input输入框
+//attr            {v-model:'msg'}
 //vm: Vue的实例
-function handleVModel(node, attr, vm) { 
-  node.value = vm[attr.value];//hello
+function handleVModel(node, attr, vm, isOnce) {
+  //拿到attr的属性
+  const key = attr.value;
+  //把模型上的值绑定在DOM元素上
+  node.value = vm[key]; //hello
+  //监听DOM事件 修改模型的数据
   node.addEventListener("input", () => {
     vm[attr.value] = node.value;
   });
-
-  new Watcher(vm, attr.value, () => {
-    node.value = vm[attr.value];
-  });
+  //在编译的时候需要添加一个监听器watcher，监听模型的数据变化，变化之后修改DOM
+  //监听Vue实例也就是vm的属性也就是key的变量 当值发生变化后执行cb回调 回调里可以修改DOM值
+  // 【保留原注释】仅修改逻辑：只有非v-once才创建Watcher
+  if (!isOnce) {
+    new Watcher(vm, key, () => {
+      node.value = vm[key];
+    });
+  }
+  // 【新增】移除v-model属性（清理冗余）
+  node.removeAttribute("v-model");
 }
-function handleVText(node, attr, vm) {
+
+// 【大幅修改】修复handleVText逻辑，保留原注释，修正执行逻辑
+function handleVText(node, attr, vm, isOnce) {
   //获取属性的值
-  const expr = attr.value;
-  // 新增：创建更新回调
-  const updateVText = (newVal) => {
-    //从当前的Vue实例属性上获取msg属性的值作为当前元素的文本内容
-    node.textContent = newVal;
-  };
-  // 初始化
-  updateVText(vm[expr]);
-  // 新增：创建Watcher
-  new Watcher(vm, expr, updateVText);
+  const key = attr.value;
+  // 【保留原逻辑】初始化赋值（必执行）
+  node.textContent = vm[key];
+  //如果不是只渲染一次就添加监听
+  // 【修复】移除重复的if判断和未定义的expr变量，只保留核心逻辑
+  if (!isOnce) {
+    // 新增：创建更新回调
+    // 【保留原注释】从当前的Vue实例属性上获取msg属性的值作为当前元素的文本内容
+    new Watcher(vm, key, () => {
+      node.textContent = vm[key];
+    });
+  }
+  // 【新增】移除v-text属性（清理冗余）
+  node.removeAttribute("v-text");
 }
 
-function handleVHtml(node, attr, vm) {
+// 【大幅修改】修复handleVHtml逻辑，保留原注释，修正变量混用问题
+function handleVHtml(node, attr, vm, isOnce) {
   //获取属性的值
-  const expr = attr.value;
-  // 新增：创建更新回调
-  const updateVHtml = (newVal) => {
-    //从当前的Vue实例属性上获取msg属性的值作为当前元素的HTML内容
-    node.innerHTML = newVal;
-  };
-  // 初始化
-  updateVHtml(vm[expr]);
-  // 新增：创建Watcher
-  new Watcher(vm, expr, updateVHtml);
+  const key = attr.value; // 【修复】统一使用key，替换原未定义的expr
+  // 【保留原逻辑】初始化赋值（必执行）
+  node.innerHTML = vm[key];
+  // 【保留原注释】从当前的Vue实例属性上获取msg属性的值作为当前元素的HTML内容
+  // 【修复】仅非v-once才创建Watcher，移除重复创建逻辑
+  if (!isOnce) {
+    new Watcher(vm, key, () => {
+      node.innerHTML = vm[key];
+    });
+  }
+  // 【新增】移除v-html属性（清理冗余）
+  node.removeAttribute("v-html");
 }
 
-function handleVBind(node, attr, vm) {
+function handleVBind(node, attr, vm, isOnce) {
   let attrName = attr.name;
   // 处理 v-bind:xxx 或 :xxx，提取真正的属性名（如 title、src 等）
   if (attrName.startsWith("v-bind:")) {
@@ -262,10 +306,16 @@ function handleVBind(node, attr, vm) {
   const updateVBind = (newVal) => {
     node.setAttribute(attrName, newVal);
   };
-  // 初始化
+  // 初始化（必执行）
   updateVBind(vm[key]);
-  // 新增：创建Watcher
-  new Watcher(vm, key, updateVBind);
+  // 【保留原注释】仅非v-once才创建Watcher
+  if (!isOnce) {
+    new Watcher(vm, key, () => {
+      node.setAttribute(attrName, vm[key]);
+    });
+  }
+  // 【新增】移除v-bind/:属性（清理冗余）
+  node.removeAttribute(attr.name);
 }
 
 function handleEvent(node, attr, vm) {
@@ -363,4 +413,6 @@ function handleEvent(node, attr, vm) {
     },
     options
   );
+  // 【新增】移除v-on/@属性（清理冗余）
+  node.removeAttribute(attr.name);
 }

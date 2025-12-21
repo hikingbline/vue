@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- 给需要固定的节点单独加 v-once -->
+      <p v-once>{{msg}}</p>
+      <span v-once v-text="msg"></span>
+      <div v-once v-html="msg"></div>
+      <h1 v-once :id="msg">h1</h1>
+      <h2 v-once :id="msg">h2</h2>
+      <!-- 输入框不加 v-once（可输入，验证数据修改后其他节点不更新） -->
+      <input v-model="msg" />
+    </div>
+
+    <script src="my-vue.js"></script>
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          msg: "hello",
+        }
+      });
+    </script>
+  </body>
+</html>

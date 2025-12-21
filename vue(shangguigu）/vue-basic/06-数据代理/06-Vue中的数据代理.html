@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue中的数据代理</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    	<div id="root">
+			<h2>学校名称:{{name}}</h2>
+            <h2>学校地址:{{address}}</h2>
+		</div>
+</body>
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    //new Vue 的时候传的是一个配置对象 options
+    //vm._data = options.data = data
+    //一旦data中的数据发生改变，那么vm._data中的数据也会发生改变,页面中的数据也会出现更新
+    const vm = new Vue({
+        el:'#root',
+        data:{
+                name:'天谕',
+                address:'广东'
+            }
+        })
+   
+</script>
+</html>

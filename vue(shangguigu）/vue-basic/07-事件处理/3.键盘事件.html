@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>键盘事件</title>
+		<!-- 引入Vue -->
+		<script type="text/javascript" src="../js/vue.js"></script>
+	</head>
+	<body>
+		
+		<div id="root">
+			<h2>欢迎来到{{name}}学习</h2>
+			<!-- keydown 按下去触发 keyup 抬起触发 -->
+			<!-- 多个单词连接的的需要小写且用-连接-->
+			<!--按下ctrl+y 触发showInfo  -->
+			<input type="text" placeholder="按下回车提示输入" @keydown.ctrl.y="showInfo">
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+		//回车的默认编码就是13
+		Vue.config.keyCodes.huiche = 13 //定义了一个别名按键
+
+		new Vue({
+			el:'#root',
+			data:{
+				name:'尚硅谷'
+			},
+			//按下了tab键，不用等tab键弹起，就会触发
+			//tab键适合与keydown.enter一起使用
+			// @keydown.tab.enter="showInfo"
+			methods: {
+				showInfo(e){
+					// console.log(e.key,e.keyCode)
+					console.log(e.target.value)
+				}
+			},
+		})
+	</script>
+</html>
