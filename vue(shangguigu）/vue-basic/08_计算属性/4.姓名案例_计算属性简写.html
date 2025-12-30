@@ -18,6 +18,7 @@
 	<script type="text/javascript">
 		Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
 
+		//这个是命令式的
 		const vm = new Vue({
 			el:'#root',
 			data:{
@@ -26,8 +27,15 @@
 			},
 			computed:{
 				//确定了只读不改就可以用简写形式
+				//计算属性是靠的fullname的返回值 不能开启异步任务
+				//但是目前还做不到让fullname等一等再有返回值
 				fullName(){
 					console.log('get被调用了')
+					//下面注释掉的是错误的写法
+					// setTimeout(()=>{
+					// 	//最新的姓加上原来的名
+					// 	return this.fullName = this.firstName + '-' + this.lastName
+					// },1000);
 					return this.firstName + '-' + this.lastName
 				}
 			}

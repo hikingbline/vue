@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>天气案例_深度监视</title>
+		<!-- 引入Vue -->
+		<script type="text/javascript" src="../js/vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<h2>今天天气很{{info}}</h2>
+			<button @click="changeWeather">切换天气</button>
+			<hr/>
+			<h3>a的值是:{{numbers.a}}</h3>
+			<button @click="numbers.a++">点我让a+1</button>
+			<h3>b的值是:{{numbers.b}}</h3>
+			<button @click="numbers.b++">点我让b+1</button>
+			<button @click="numbers = {a:666,b:888}">彻底替换掉numbers</button>
+			<h3>e的值是:{{numbers?.c?.d?.e || '暂无数据'}}</h3>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		Vue.config.productionTip = false 
+		
+		const vm = new Vue({
+			el:'#root',
+			data:{
+				isHot:true,
+				numbers:{
+					a:1,
+					b:1,
+					c:{
+						d:{
+							e:100
+						}
+					}
+				}
+			},
+			computed:{
+				info(){
+					return this.isHot ? '炎热' : '凉爽'
+				}
+			},
+			methods: {
+				changeWeather(){
+					this.isHot = !this.isHot
+				}
+			},
+			watch:{
+				isHot:{
+					handler(newValue,oldValue){
+						console.log('isHot被修改了',newValue,oldValue)
+					}
+				},
+				// 深度监视numbers所有属性变化
+				numbers:{
+					deep:true,
+					handler(){
+						console.log('numbers改变了')
+					}
+				}
+			}
+		})
+	</script>
+</html>
