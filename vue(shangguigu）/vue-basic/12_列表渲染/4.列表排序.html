@@ -6,7 +6,6 @@
 		<script type="text/javascript" src="../js/vue.js"></script>
 	</head>
 	<body>
-		<!-- 准备好一个容器-->
 		<div id="root">
 			<h2>人员列表</h2>
 			<input type="text" placeholder="请输入名字" v-model="keyWord">
@@ -36,13 +35,21 @@
 						{id:'004',name:'温兆伦',age:19,sex:'男'}
 					]
 				},
+
+				//只要一个属性发生变化，整个属性都会重新计算
+				//一切的逻辑都在计算属性里
 				computed:{
 					filPerons(){
+						//先别急着返回过滤后的数组
+						//先进行过滤  filter是过滤出的意思，就是把括号里面满足条件的过滤出来并返回
+						//再进行排序
 						const arr = this.persons.filter((p)=>{
 							return p.name.indexOf(this.keyWord) !== -1
 						})
-						//判断一下是否需要排序
+						//不管是1还是2 都是真 如果是0的话都进不来
 						if(this.sortType){
+							//sort排序 传入一个比较函数
+							//p1和p2是数组中的两个元素
 							arr.sort((p1,p2)=>{
 								return this.sortType === 1 ? p2.age-p1.age : p1.age-p2.age
 							})

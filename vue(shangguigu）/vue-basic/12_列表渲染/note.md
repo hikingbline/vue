@@ -5,6 +5,9 @@
 
 ## 面试题：react、vue中的key有什么作用？（key的内部原理）
 ## 1. 虚拟DOM中key的作用：
+虚拟dom框架,key就是为了避免不必要的dom更新和操作,key是diff的一种依据,每一个元素是靠key来进行比对的,
+Diff 算法仅在同级节点间递归比对， key  是新旧节点映射的核心依据,新旧节点列表比对时，先根据  key  建立节点映射表,找到相同  key  的节点，判定为可复用节点，仅对比并更新节点的属性/内容,新列表有、旧列表无的  key 再 执行新增节点操作,旧列表有、新列表无的  key 再执行删除节点操作,若不设置  key diff 会降级为按索引比对，索引变化会导致大量节点被重新创建或者销毁，性能下降且易引发状态异常.
+
 key是虚拟DOM对象的标识，当数据发生变化时，Vue会根据【新数据】生成【新的虚拟DOM】, 
 随后Vue进行【新虚拟DOM】与【旧虚拟DOM】的差异比较，比较规则如下：
 对比规则：
@@ -14,6 +17,49 @@ key是虚拟DOM对象的标识，当数据发生变化时，Vue会根据【新�
 (2).旧虚拟DOM中未找到与新虚拟DOM相同的key
 创建新的真实DOM，随后渲染到到页面。
 
+## 虚拟DOM是什么？
+虚拟DOM是Vue中将真实DOM封装生成的对象，Vue会根据虚拟DOM对象生成真实DOM对象，
+虚拟DOM是JS对象，不是真实DOM对象。
+虚拟dom在整个js是一个链表,然后都是递归渲染链表实现的框架
+虚拟DOM好比是DOM树形结构，虚拟DOM的生成过程如下：
+(1).先创建好所有DOM元素，并放入内存中。
+(2).将DOM树形结构，转换成内存中的虚拟DOM树形结构。
+(3).将内存中的虚拟DOM树形结构，转换成真实DOM树形结构，并挂载到页面中。
+
+## 虚拟 DOM Diff 算法核心思想：
+采用同层比较，忽略跨层节点变化
+通过 tag + key 判断节点是否可复用
+对子节点列表采用 双端指针 + key 映射表 进行高效比较
+生成最小补丁，只更新必要的真实 DOM
+
+## li标签的虚拟dom示例：
+const vnode = {
+  __v_isVNode: true,
+  __v_skip: true,
+  type: 'li',
+  props: {
+    class: 'list-item',
+    onClick: handleClick
+  },
+  key: 'item-1',
+  ref: null,
+  children: [
+    {
+      type: Text,
+      children: 'Vue3 VNode 示例'
+    }
+  ],
+  shapeFlag: 1,
+  patchFlag: 6,
+  el: null,
+  anchor: null,
+  target: null,
+  targetAnchor: null,
+  staticCount: 0,
+  dynamicProps: null,
+  dynamicChildren: null
+}
+
 ## 用index作为key可能会引发的问题：
 1. 若对数据进行：逆序添加、逆序删除等破坏顺序操作:
 会产生没有必要的真实DOM更新 ==> 界面效果没问题, 但效率低。
@@ -21,7 +67,7 @@ key是虚拟DOM对象的标识，当数据发生变化时，Vue会根据【新�
 会产生错误DOM更新 ==> 界面有问题。
 
 ## 开发中如何选择key?:
-1.最好使用每条数据的唯一标识作为key, 比如id、手机号、身份证号、学号等唯一值。
+1.最好使用每条数据的唯一标识id作为key, 比如id、手机号、身份证号、学号等唯一值。
 2.如果不存在对数据的逆序添加、逆序删除等破坏顺序操作，仅用于渲染列表用于展示，
 使用index作为key是没有问题的。
 
@@ -43,5 +89,9 @@ vm.$set(target，propertyName/index，value)
 4.在Vue修改数组中的某个元素一定要用如下方法：
 1.使用这些API:push()、pop()、shift()、unshift()、splice()、sort()、reverse()
 2.Vue.set() 或 vm.$set()
+示例：addSex(){
+					Vue.set(this.student,'sex','男')
+					this.$set(this.student,'sex','男')
+				}
 
 特别注意：Vue.set() 和 vm.$set() 不能给vm 或 vm的根数据对象 添加属性！！！
