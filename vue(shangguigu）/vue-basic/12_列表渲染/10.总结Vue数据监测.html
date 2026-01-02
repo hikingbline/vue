@@ -55,26 +55,33 @@
 					]
 				}
 			},
+			//只要是修改了student对象，都会触发数据劫持
 			methods: {
 				addSex(){
 					// Vue.set(this.student,'sex','男')
 					this.$set(this.student,'sex','男')
 				},
+				// 在列表首位添加一个朋友
 				addFriend(){
 					this.student.friends.unshift({name:'jack',age:70})
 				},
+				// 修改第一个朋友的名字为：张三
 				updateFirstFriendName(){
 					this.student.friends[0].name = '张三'
 				},
+				// 添加一个爱好
 				addHobby(){
 					this.student.hobby.push('学习')
 				},
+				// 修改第一个爱好为：开车
 				updateHobby(){
-					// this.student.hobby.splice(0,1,'开车')
+					// this.student.hobby.splice(0,1,'开车')  //把第一个元素替换为开车 splice(0,1)表示从第0个位置开始，
+					// 删除1个元素,然后再添加'开车'
 					// Vue.set(this.student.hobby,0,'开车')
 					this.$set(this.student.hobby,0,'开车')
 				},
 				removeSmoke(){
+					//过滤出不是抽烟的爱好
 					this.student.hobby = this.student.hobby.filter((h)=>{
 						return h !== '抽烟'
 					})
