@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<title>Document</title>
-		<style>
-			.demo{
-				background-color: orange;
-			}
-		</style>
-	</head>
-	<body>
-		<button id="btn">点我创建一个输入框</button>
-		
-		<script type="text/javascript" >
-			const btn = document.getElementById('btn')
-			btn.onclick = ()=>{
-				const input = document.createElement('input')
+  <head>
+    <meta charset="UTF-8" />
+    <title>DOM操作创建输入框</title>
+    <style>
+      .demo {
+        background-color: orange;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="btn">点我创建一个输入框</button>
 
-				input.className = 'demo'
-				input.value = 99
-				input.onclick = ()=>{alert(1)}
-				
-				document.body.appendChild(input)
+    <script type="text/javascript">
+      // 代码执行流程梳理
+      // 页面加载后，先找到 id 为btn的按钮。
+      // 点击该按钮 → 触发按钮的点击事件。
+      // 事件内部：创建 input 元素 → 设置 class、value、点击事件 → 把 input 添加到 body 里 → 让 input 获得焦点 → 打印 input 的父元素（body）。
+      // 此时页面上会出现一个值为 99 的输入框，点击这个输入框会弹出 “1” 的提示框。
+      const btn = document.getElementById("btn");
+      btn.onclick = () => {
+        const input = document.createElement("input");
 
-				input.focus()
-				// input.parentElement.style.backgroundColor = 'skyblue'
-				console.log(input.parentElement)
-				
-			}
-		</script>
-	</body>
+		// 4. 给新创建的input设置class类名
+        input.className = "demo";
+        input.value = 99;
+        input.onclick = () => {
+          alert(1);
+        };
+
+        document.body.appendChild(input);
+
+        input.focus();
+        input.parentElement.style.backgroundColor = 'skyblue'
+        console.log(input.parentElement);
+      };
+    </script>
+  </body>
 </html>
