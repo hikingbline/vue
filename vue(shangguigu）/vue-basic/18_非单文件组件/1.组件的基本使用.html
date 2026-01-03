@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>基本使用</title>
+		<script type="text/javascript" src="../js/vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<hello></hello>
+			<hr>
+			<h1>{{msg}}</h1>
+			<hr>
+			<school></school>
+			<hr>
+			<student></student>
+		</div>
+
+		<div id="root2">
+			<hello></hello>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		Vue.config.productionTip = false
+
+        //Vue.extend() 这是创建组件常用的API
+		//创建school组件
+		const school = Vue.extend({
+			template:`
+				<div class="demo">
+					<h2>学校名称：{{schoolName}}</h2>
+					<h2>学校地址：{{address}}</h2>
+					<button @click="showName">点我提示学校名</button>	
+				</div>
+			`,
+			data(){
+				return {
+					schoolName:'北京大学',
+					address:'北京市海淀区'
+				}
+			},
+			methods: {
+				showName(){
+					alert(this.schoolName)
+				}
+			},
+		})
+
+		//创建student组件
+		const student = Vue.extend({
+			template:`
+				<div>
+					<h2>学生姓名：{{studentName}}</h2>
+					<h2>学生年龄：{{age}}</h2>
+				</div>
+			`,
+			//写成函数式的好处 每次创建组件实例时,都会调用该函数 从而返回一个全新的数据对象
+			data(){
+				return {
+					studentName:'张三',
+					age:18
+				}
+			}
+		})
+		
+		//创建hello组件
+		const hello = Vue.extend({
+			template:`
+				<div>	
+					<h2>你好啊！{{name}}</h2>
+				</div>
+			`,
+			data(){
+				return {
+					name:'Tom'
+				}
+			}
+		})
+		
+		Vue.component('hello',hello)
+
+		//创建Vue实例 注册组件
+		new Vue({
+			el:'#root',
+			data:{
+				msg:'你是帅哥！'
+			},
+			//组件注册完毕（局部注册）
+			components:{
+				school,
+				student,
+			}
+		})
+		new Vue({
+			el:'#root2',
+		})
+	</script>
+</html>

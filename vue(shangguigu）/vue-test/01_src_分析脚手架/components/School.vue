@@ -20,15 +20,11 @@
 				alert(this.name)
 			}
 		},
-}
-	// 
+	}
 </script>
 
-<!-- .vue文件里面不能随便写标签 -->
 <style>
-	/*  */
 	.demo{
-		background-color: black;
 		background-color: orange;
 	}
 </style>

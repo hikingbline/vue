@@ -2,12 +2,17 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>练习一下单文件组件的语法</title>
+		<title>单文件组件的语法</title>
 	</head>
 	<body>
-		<!-- 准备一个容器 -->
-		<div id="root"></div>
-		<!-- <script type="text/javascript" src="../js/vue.js"></script> -->
-		<!-- <script type="text/javascript" src="./main.js"></script> -->
+		<!-- 浏览器默认将普通<script>标签视为 “非模块”，
+		而代码中使用了 ES6 模块化的import语法，导致浏览器无法识别。 -->
+		<div id="root">
+		</div>
+		<!-- 先让模板出来再引入 -->
+		<!-- <script type="text/javascript" src="../js/vue.js"></script> 
+		<script type="text/javascript" src="./main.js"></script> -->
 	</body>
 </html>
+
+
