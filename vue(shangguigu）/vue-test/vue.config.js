@@ -1,3 +1,4 @@
+//个性化定制脚手架
 module.exports = {
   pages: {
     index: {

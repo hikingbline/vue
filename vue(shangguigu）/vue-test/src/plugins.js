@@ -1,4 +1,9 @@
+
+//由于只有一个东西所以就用默认暴露了
 export default {
+	// 这里的 Vue 不是你 import Vue from 'vue' 的那个局部变量名，而是：
+	// 当前正在使用的 Vue 构造函数本身（全局的 Vue）
+	// vm 和 vc 本质上都是由这个 Vue 构造函数创建出来的实例对象
 	install(Vue,x,y,z){
 		console.log(x,y,z)
 		//全局过滤器

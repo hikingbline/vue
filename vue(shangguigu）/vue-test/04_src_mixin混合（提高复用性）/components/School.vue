@@ -14,7 +14,8 @@
 		data() {
 			return {
 				name:'尚硅谷',
-				address:'北京',
+				address: '北京',
+				//以混合为主，原来的数据被替换掉
 				x:666
 			}
 		},

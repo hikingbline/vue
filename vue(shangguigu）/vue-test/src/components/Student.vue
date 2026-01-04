@@ -1,8 +1,7 @@
 <template>
-	<div>
-		<h2>学生姓名：{{name}}</h2>
-		<h2>学生性别：{{sex}}</h2>
-		<input type="text" v-fbind:value="name">
+	<div class="demo">
+		<h2 class="title">学生姓名：{{name}}</h2>
+		<h2 class="qwe">学生性别：{{sex}}</h2>
 	</div>
 </template>
 
@@ -15,5 +14,15 @@
 				sex:'男'
 			}
 		},
+		// mixins:[hunhe,hunhe2]
 	}
 </script>
+
+<style lang="less" scoped>
+.demo {
+  background-color: blue;
+  .qwe {
+	font-size: 40px;
+  }
+}
+</style>
