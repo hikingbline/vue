@@ -21,7 +21,7 @@
 		data() {
 			return {
 				//由于todos是MyHeader组件和MyFooter组件都在使用，所以放在App中
-				todos:JSON.parse(localStorage.getItem('todos')) || [
+				todos:[
 					{id:'001',title:'抽烟',done:true},
 					{id:'002',title:'喝酒',done:false},
 					{id:'003',title:'开车',done:true}
@@ -55,21 +55,6 @@
 					return !todo.done
 				})
 			}
-	},
-	watch: {
-		//只要todos发生变化，就会触发此函数
-		//完整版写法
-		todos: {
-			handler(value) {
-				//每一个todo都是一个对象
-				localStorage.setItem('todos',JSON.stringify(value))
-			},
-			deep: true //深度监听
-		}
-		// todos(value) {
-		// 	//每一个todo都是一个对象
-		// 		localStorage.setItem('todos',JSON.stringify(value))
-		// 	}
 		}
 	}
 </script>

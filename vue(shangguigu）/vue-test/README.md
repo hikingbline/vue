@@ -20,7 +20,6 @@
 	├── package-lock.json：包版本控制文件
 
 ## 关于不同版本的Vue
-
 1. vue.js与vue.runtime.xxx.js的区别：
     1. vue.js是完整版的Vue，包含：核心功能 + 模板解析器。
     2. vue.runtime.xxx.js是运行版的Vue，只包含：核心功能；没有模板解析器。
@@ -499,7 +498,7 @@ module.exports = {
    })
    ```
 
-###    4.基本使用
+### 4.基本使用
 
 1. 初始化数据、配置```actions```、配置```mutations```，操作文件```store.js```
 
@@ -692,7 +691,7 @@ module.exports = {
    ...mapMutations('countAbout',{increment:'JIA',decrement:'JIAN'}),
    ```
 
- ## 路由
+### 路由
 
 1. 理解： 一个路由（route）就是一组映射关系（key - value），多个路由需要路由器（router）进行管理。
 2. 前端路由：key是路径，value是组件。
@@ -1056,9 +1055,6 @@ module.exports = {
    ```
 
 ### 13.路由器的两种工作模式
-
-
-
 1. 对于一个url来说，什么是hash值？—— #及其后面的内容就是hash值。
 2. hash值不会包含在 HTTP 请求中，即：hash值不会带给服务器。
 3. hash模式：
