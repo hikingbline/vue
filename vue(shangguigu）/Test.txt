@@ -1,3 +1,0 @@
-beforeCreate() {
-    Vue.prototyoe.$bus = this;
-}
